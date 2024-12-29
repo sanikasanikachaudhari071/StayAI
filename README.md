@@ -49,6 +49,9 @@ b. Set Up CrewAI
 # Navigate to CrewAI directory
 cd backend/agents/stay_ai_crew
 
+# copy the env_template.txt file to .env
+cp env_template.txt .env
+
 # Run CrewAI setup
 crewai run
 ```
