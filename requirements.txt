@@ -6,3 +6,4 @@ langchain-text-splitters==0.3.2
 chromadb==0.5.23
 mem0ai==0.1.34
 groq==0.13.0
+sentence-transformers==3.3.1

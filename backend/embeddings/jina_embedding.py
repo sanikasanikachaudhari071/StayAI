@@ -6,14 +6,16 @@ from backend.embeddings.base_embedding import BaseEmbedding, EmbeddingInput
 
 load_dotenv()
 
+
 class JinaEmbeddingInput(EmbeddingInput):
     task: str = "text-matching"
     late_chunking: bool = False
     URL: str = "https://api.jina.ai/v1/embeddings"
     headers: dict[str, str] = {
-        'Content-Type': 'application/json',
-        'Authorization': f'Bearer {os.getenv("JINA_API_KEY")}'
+        "Content-Type": "application/json",
+        "Authorization": f'Bearer {os.getenv("JINA_API_KEY")}',
     }
+
 
 class JinaEmbedding(BaseEmbedding):
     def __init__(self, embedding_input: JinaEmbeddingInput) -> None:
@@ -26,17 +28,19 @@ class JinaEmbedding(BaseEmbedding):
             "late_chunking": self._input.late_chunking,
             "dimensions": self._input.dimensions,
             "embedding_type": self._input.embedding_type,
-            "input": texts
+            "input": texts,
         }
-        response = requests.post(self._input.URL, headers=self._input.headers, json=data)
+        response = requests.post(
+            self._input.URL, headers=self._input.headers, json=data
+        )
         return self._parse_jina_response(response.json())
 
     def _parse_jina_response(self, response: dict) -> List[List[float]]:
         result = []
-        for embedding in response['data']:
-            result.append(embedding['embedding'])
+        for embedding in response["data"]:
+            result.append(embedding["embedding"])
         return result
-    
+
 
 if __name__ == "__main__":
     input = JinaEmbeddingInput(
@@ -44,13 +48,15 @@ if __name__ == "__main__":
         task="text-matching",
         late_chunking=False,
         dimensions=1024,
-        embedding_type="float"
+        embedding_type="float",
     )
     embedding = JinaEmbedding(input)
     embedding_outputs: List[List[float]] = embedding.generate_batch_embeddings(
         ["Hello, how are you?", "I am arkajit datta"]
     )
-    
+
     # Calculate cosine similarity between the two embeddings
-    similarity: float = embedding.calculate_cosine_similarity(embedding_outputs[0], embedding_outputs[1])
+    similarity: float = embedding.calculate_cosine_similarity(
+        embedding_outputs[0], embedding_outputs[1]
+    )
     print(f"Cosine similarity: {similarity}")

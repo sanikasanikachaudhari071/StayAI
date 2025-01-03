@@ -3,10 +3,12 @@ from pydantic import BaseModel
 from abc import ABC, abstractmethod
 import numpy as np
 
+
 class EmbeddingInput(BaseModel):
     model_name: str
     dimensions: int
     embedding_type: str
+
 
 class BaseEmbedding(ABC):
     def __init__(self, embedding_input: Type[EmbeddingInput]) -> None:
@@ -24,7 +26,7 @@ class BaseEmbedding(ABC):
         """
         embeddings: List[List[float]] = self._call_embedding_model([text])
         return embeddings[0]
-    
+
     def generate_batch_embeddings(self, texts: List[str]) -> List[List[float]]:
         """
         Generate embeddings for a list of texts.
@@ -37,12 +39,14 @@ class BaseEmbedding(ABC):
         """
         embeddings: List[List[float]] = self._call_embedding_model(texts)
         return embeddings
-    
+
     @abstractmethod
     def _call_embedding_model(self, texts: List[str]) -> List[List[float]]:
         pass
 
-    def calculate_cosine_similarity(self, embedding1: List[float], embedding2: List[float]) -> float:
+    def calculate_cosine_similarity(
+        self, embedding1: List[float], embedding2: List[float]
+    ) -> float:
         """
         Calculate cosine similarity between two embeddings.
 
@@ -56,8 +60,8 @@ class BaseEmbedding(ABC):
         # Convert lists to numpy arrays for efficient computation
         vec1 = np.array(embedding1)
         vec2 = np.array(embedding2)
-        
+
         # Calculate cosine similarity: dot product divided by the product of norms
         similarity = np.dot(vec1, vec2) / (np.linalg.norm(vec1) * np.linalg.norm(vec2))
-        
+
         return float(similarity)
