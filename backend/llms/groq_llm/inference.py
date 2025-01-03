@@ -10,7 +10,7 @@ class GroqInference:
         self.groq_client = Groq()
         self.model = model
 
-    def generate_response(self, messages: List[Dict[str, str]]) -> str:
+    def generate_response(self, messages: List[Dict[str, str]], temperature=0.1,max_tokens=512,top_p=1,stream=False,stop=None,) -> str:
         """
         Generate a response using Groq's LLM.
 
@@ -23,10 +23,10 @@ class GroqInference:
         completion: ChatCompletion = self.groq_client.chat.completions.create(
             model=self.model,
             messages=messages,
-            temperature=0.1,
-            max_tokens=512,
-            top_p=1,
-            stream=False,
-            stop=None,
+            temperature=temperature,
+            max_tokens=max_tokens,
+            top_p=top_p,
+            stream=stream,
+            stop=stop,
         )
         return completion.choices[0].message.content
