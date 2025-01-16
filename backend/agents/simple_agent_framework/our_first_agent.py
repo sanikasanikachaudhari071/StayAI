@@ -1,11 +1,9 @@
 import json
-import os
 import requests
 from abc import ABC, abstractmethod
-
 from backend.llms.groq_llm.inference import GroqInference
 
-SERPER_API_KEY = "<YOUR_SERPER_API_KEY>"
+SERPER_API_KEY = "85171ec5a4a96963cef76093924898f738744fd9"
 llm = GroqInference()
 
 class OurFirstAgent:
@@ -67,22 +65,44 @@ class BrowserTool(Tool):
         return "\n".join(snippets)
 
     def summarize_snippets(self, snippets: str) -> str:
+        
         """Summarize the snippets
 
         Args:
             snippets (str): The snippets to summarize
+
         """
-        
-        # TODO: Use the LLM to summarize the snippets
-        system_prompt = ""
-        user_prompt = ""
-        
-        
-        return ""
+        system_prompt = '''
+        You are a summarization agent that condenses web content into clear and user-friendly summaries.
+
+        instructions:
+        1. keep the first few lines brief and introductory.
+        '''
+
+        user_prompt = f"""
+        Here are some search result snippets:
+    
+        {snippets}
+
+        Please summarize this content in a concise and easy-to-read manner.
+        """
+
+        messages = [
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": user_prompt},
+        ]
+    
+        response = llm.generate_response(messages)
+        return response
+
 
 if __name__ == "__main__":
     tool = BrowserTool()
-    results = tool.search("Give me some information about places to visit in Jaipur")
-    snippets = tool.get_snippets_from_search_results(results)
-    summary = tool.summarize_snippets(snippets)
-    print(summary)
+    while True :
+        query = input("enter the query or enter [exit]")
+        if query.lower() == exit:
+            break
+        results = tool.search(query)
+        snippets = tool.get_snippets_from_search_results(results)
+        summary = tool.summarize_snippets(snippets)
+        print(summary)
