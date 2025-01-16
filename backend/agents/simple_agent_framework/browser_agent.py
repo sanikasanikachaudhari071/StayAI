@@ -6,7 +6,7 @@ from abc import ABC, abstractmethod
 from backend.utils.json_utils import pre_process_the_json_response, load_object_from_string
 from backend.llms.groq_llm.inference import GroqInference
 
-SERPER_API_KEY = "990671de87bbc752fdd91cd8f5621d35d2d62e64"
+SERPER_API_KEY = ""
 llm = GroqInference()
 
 
