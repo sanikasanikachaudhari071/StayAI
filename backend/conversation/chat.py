@@ -1,3 +1,6 @@
+from typing import List, Dict
+
+from concurrent.futures import ThreadPoolExecutor
 from backend.memory.chroma_memory.retrieve_data import query_chroma
 from backend.llms.groq_llm.inference import GroqInference
 from backend.memory.mem0_memory.try_mem0 import (
@@ -25,7 +28,7 @@ def print_section(title: str = "", content: str = "", separator: str = "=") -> N
         print(f"{separator * 80}")
 
 
-def chat_with_travel_assistant():
+def chat_with_travel_assistant(user_id: str, user_query: str, messages: List[Dict[str, str]]):
     system_prompt = """
     You are an assistant who's job is to answer the question of the user based on the data being
     retrieved from the knowledge source.
@@ -41,58 +44,50 @@ def chat_with_travel_assistant():
     3. If relevant memories are found, use them to answer the user query accordingly. It might help you answer the user query better with the help of the memories.
     """
     agent = BrowserAgent()
-
-    messages = [{"role": "system", "content": system_prompt}]
-    print("\n" + "=" * 80)
-    user_id: str = input("\n👤 Who is the user?.....    ")
     print_section()
 
-    while True:
-        user_query: str = input("\n🤔 Ask your question: ")
-        print_section()
+    memories: list[str] = extract_relevant_memories(user_query, user_id)
+    memories: list[str] = extract_relevant_memories(user_query, user_id)
+    print_section("📚 Memories:", memories or "No relevant memories found.")
 
-        memories: list[str] = extract_relevant_memories(user_query, user_id)
-        print_section("📚 Memories:", memories or "No relevant memories found.")
+    rephrased_query: str = rephrase_user_query(user_query, memories)
+    print_section("📚 Rephrased Query:", rephrased_query)
 
-        rephrased_query: str = rephrase_user_query(user_query, memories)
-        print_section("📚 Rephrased Query:", rephrased_query)
+    documents: str = query_chroma(
+        rephrased_query, collection_name="travel_data", n_results=3
+    )
 
-        documents: str = query_chroma(
-            rephrased_query, collection_name="travel_data", n_results=3
-        )
+    print_section("📚 Knowledge Source:", documents)
 
-        print_section("📚 Knowledge Source:", documents)
+    agent_response = agent.run(user_query)
 
-        agent_response = agent.run(user_query)
+    print_section("✨ Agent Response:", agent_response)
 
-        print_section("✨ Agent Response:", agent_response)
+    messages.append(
+        {
+            "role": "user",
+            "content": f"""
+        USER QUERY: {user_query}
+        
+        RELEVANT MEMORIES:
+        {memories}
+        
+        RELEVANT DOCUMENTS:
+        {documents}
+        
+        OBSERVATIONS FROM THE AGENT WHICH SURFED THE INTERNET:
+        {agent_response}
+        """,
+        }
+    )
 
-        messages.append(
-            {
-                "role": "user",
-                "content": f"""
-            USER QUERY: {user_query}
-            
-            RELEVANT MEMORIES:
-            {memories}
-            
-            RELEVANT DOCUMENTS:
-            {documents}
-            
-            OBSERVATIONS FROM THE AGENT WHICH SURFED THE INTERNET:
-            {agent_response}
-            """,
-            }
-        )
-
-        assistant_answer: str = groq_llm.generate_response(messages)
-        messages.append({"role": "assistant", "content": assistant_answer})
-        print_section("✨ Travel Assistant:", assistant_answer)
-
-        # Add the assistant answer to mem0 in background
-        Thread(
-            target=add_memory_in_mem0, args=(user_query, user_id), daemon=True
-        ).start()
+    assistant_answer: str = groq_llm.generate_response(messages)
+    messages.append({"role": "assistant", "content": assistant_answer})
+    
+    with ThreadPoolExecutor() as executor:
+        executor.submit(add_memory_in_mem0, user_query, user_id)
+    
+    return assistant_answer, messages
 
 
 def rephrase_user_query(query, memories) -> str:
