@@ -66,11 +66,31 @@ cp env_template.txt .env
 
     
 
-5. Try it out
+5. Start the application
+
+Run the streamlit app
 ```bash
+# Make sure you are in the root directory
+streamlit run frontend/app.py
+```
+
+Run the FastAPI server
+```bash
+# Make sure you are in the root directory
 python main.py
 ```
 
+NOTE: Make sure you have both the streamlit app and the FastAPI server running.
+
 ### Prerequisites
  - Python (v3.9 or v3.10)
+ - Streamlit
+ - FastAPI
+ - CrewAI
+ - Langchain
+ - Langchain-community
+ - Langchain-text-splitters
+ - ChromaDB
+ - Mem0AI
+ - Groq
 
