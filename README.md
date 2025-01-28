@@ -158,6 +158,10 @@ StayAI/
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
+## Contact
+
+You can contactme on [Sanika Chaudhari](sanikachaudhari071@gmail.com)
+
 ## Acknowledgments
 
 - Thanks to all contributors and the open-source community for their support and resources.
