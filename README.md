@@ -15,79 +15,76 @@ StayAI is designed to enhance the hospitality experience by providing automated,
 - 🔄 Real-time service coordination
 - 📊 Analytics and insights
 
-##Installation
+## Installation
 
-### Getting started with the repository
+### Getting Started with the Repository
 
-1. Clone the repository
-```bash
-git clone https://github.com/sanikasanikachaudhari071/StayAI
+1. **Clone the Repository**
+   ```bash
+   git clone https://github.com/sanikasanikachaudhari071/StayAI
+   ```
+2. **Install Dependencies**
+
+   a. **Install Python Packages**
+   ```bash
+   # Navigate to project directory
+   cd StayAI
+
+   # Create the Python environment
+   python3.10 -m venv .venv
+
+   # Activate the environment
+   # For Linux/Mac
+   source .venv/bin/activate
+   # For Windows
+   .venv/Scripts/Activate
+   ```
+
+   b. **Set Up CrewAI**
+   ```bash
+   # Navigate to CrewAI directory
+   cd backend/agents/stay_ai_crew
+
+   # Copy the env_template.txt file to .env
+   cp env_template.txt .env
+
+   # Run CrewAI setup
+   crewai run
+   ```
+
+   c. **Configure Environment Variables**
+   - Copy the `env_template.txt` file to `.env` and replace the placeholders with your actual keys.
+   ```bash
+   cp env_template.txt .env
+   ```
+   - You need to obtain API keys from:
+     - Jina AI
+     - Groq
+     - Serper API
+
+3. **Install Additional Dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Start the Application**
+   - Run the Streamlit app:
+   ```bash
+   # Make sure you are in the root directory
+   streamlit run frontend/app.py
+   ```
+
+   - Run the FastAPI server:
+   ```bash
+   # Make sure you are in the root directory
+   python main.py
+   ```
+
+   **Note:** Ensure that both the Streamlit app and the FastAPI server are running simultaneously.
+
+## Project Structure
+
 ```
-2. Install the dependencies
-a. Install Python Packages
-```bash
-# Navigate to project directory
-cd StayAI
-
-# Create the python environment
-python3.10 -m venv .venv
-
-# activate the environment
-linux/max
-    source .venv/bin/activate
-windows
-    .venv/Scripts/Activate
-
-# Install Python dependencies
-pip install -r requirements.txt
-```
-
-b. Set Up CrewAI
-```bash
-# Navigate to CrewAI directory
-cd backend/agents/stay_ai_crew
-
-# copy the env_template.txt file to .env
-cp env_template.txt .env
-
-# Run CrewAI setup
-crewai run
-```
-
-c. Configure Environment Variables
-Copy the env_template.txt file to .env and replace the place-your-key with your actual keys
-```bash
-# Copy environment template
-cp env_template.txt .env
-```
-*You need to take api key from:
- -- Jina ai
- --Groq 
- --serper api key
-
-3. Install Dependencies:
-'''bash
-pip install -r requirements.txt
-'''
-    
-4. Start the application
-
-Run the streamlit app
-```bash
-# Make sure you are in the root directory
-streamlit run frontend/app.py
-```
-
-Run the FastAPI server
-```bash
-# Make sure you are in the root directory
-python main.py
-```
-
-NOTE: Make sure you have both the streamlit app and the FastAPI server running.
-
-### Project Structure
-
 StayAI/
 │
 ├── backend/                    
@@ -125,35 +122,45 @@ StayAI/
 ├── .env                        
 ├── requirements.txt                             
 └── README.md  
+```
 
-### Dependencies
- - Python (v3.9 or v3.10)
- - Streamlit
- - FastAPI
- - CrewAI
- - Langchain
- - Langchain-community
- - Langchain-text-splitters
- - ChromaDB
- - Mem0AI
- - Groq
+## Dependencies
 
-### Contributing
+- **Python** (v3.9 or v3.10)
+- **Streamlit**
+- **FastAPI**
+- **CrewAI**
+- **Langchain**
+- **Langchain-community**
+- **Langchain-text-splitters**
+- **ChromaDB**
+- **Mem0AI**
+- **Groq**
 
-1.Fork the Repository
-2. Create a New Branch:
-''' bash 
-git checkout -b feature/YourFeature
-'''
-3.Commit your changes:
-''' bash 
-git commit -m "add your message here"
-'''
-4.Push to the branch:
-''' bash
-git push origin feature/YourFeature
-'''
-5.Open a Pull request
+## Contributing
+
+1. **Fork the Repository**
+2. **Create a New Branch**
+   ```bash
+   git checkout -b feature/YourFeature
+   ```
+3. **Commit Your Changes**
+   ```bash
+   git commit -m "Add your message here"
+   ```
+4. **Push to the Branch**
+   ```bash
+   git push origin feature/YourFeature
+   ```
+5. **Open a Pull Request**
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- Thanks to all contributors and the open-source community for their support and resources.
 
 
 
